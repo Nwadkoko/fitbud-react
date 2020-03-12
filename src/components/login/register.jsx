@@ -1,27 +1,16 @@
 import React from "react";
 import loginImg from "../../login.svg";
-import withFirebaseAuth from "react-with-firebase-auth";
-import * as firebase from "firebase/app";
-import "firebase/auth";
-import firebaseConfig from "../firebase/firebaseConfig";
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-const firebaseAppAuth = firebaseApp.auth();
-const providers = {
-  googleProvider: new firebase.auth.GoogleAuthProvider()
-};
-
-export class Login extends React.Component {
+export class Register extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    const { user, signOut, signInWithGoogle } = this.props;
     return (
-      <div className="base-container" ref={this.props.containerRef}>
-        <div className="header">Login</div>
+      <div className="base-container"  ref={this.props.containerRef}>
+        <div className="header">Register</div>
         <div className="content">
           <div className="image">
             <img src={loginImg} />
@@ -32,20 +21,21 @@ export class Login extends React.Component {
               <input type="text" name="username" placeholder="username" />
             </div>
             <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input type="email" name="email" placeholder="email" />
+            </div>
+            <div className="form-group">
               <label htmlFor="password">Password</label>
-              <input type="password" name="password" placeholder="password" />
+              <input type="text" name="password" placeholder="password" />
             </div>
           </div>
         </div>
         <div className="footer">
           <button type="button" className="btn">
-            Login
+            Register
           </button>
-          <button className="btn" onClick={signInWithGoogle}>Sign in with Google</button>
         </div>
       </div>
     );
   }
 }
-
-
