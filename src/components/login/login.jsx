@@ -1,24 +1,26 @@
 import React from "react";
 import loginImg from "../../login.svg";
-import withFirebaseAuth from "react-with-firebase-auth";
-import * as firebase from "firebase/app";
-import "firebase/auth";
-import firebaseConfig from "../firebase/firebaseConfig";
-
-const firebaseApp = firebase.initializeApp(firebaseConfig);
+import withFirebaseAuth from 'react-with-firebase-auth'
+import 'firebase/auth';
+import firebaseApp from '../firebase/firebase';
+import * as firebase from 'firebase/app';
 
 const firebaseAppAuth = firebaseApp.auth();
 const providers = {
-  googleProvider: new firebase.auth.GoogleAuthProvider()
+  googleProvider: new firebase.auth.GoogleAuthProvider(),
 };
 
-export class Login extends React.Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    const { user, signOut, signInWithGoogle } = this.props;
+    const {
+      user,
+      signOut,
+      signInWithGoogle,
+    } = this.props;
     return (
       <div className="base-container" ref={this.props.containerRef}>
         <div className="header">Login</div>
@@ -47,5 +49,10 @@ export class Login extends React.Component {
     );
   }
 }
+
+export default withFirebaseAuth({
+  providers,
+  firebaseAppAuth,
+})(Login);
 
 
