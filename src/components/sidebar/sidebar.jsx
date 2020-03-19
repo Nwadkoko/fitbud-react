@@ -9,7 +9,7 @@ export class Sidebar extends React.Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container-sidebar">
         <div style={{ width: 250 }}>
           <Sidenav defaultOpenKeys={["3", "4"]} activeKey="1">
             <Sidenav.Body>
