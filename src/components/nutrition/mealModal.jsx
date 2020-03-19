@@ -38,8 +38,11 @@ export class MealModal extends React.Component {
             <Button variant="secondary" onClick={this.handleClose}>
               Close
             </Button>
+            <Button variant="primary">
+              Save meal
+            </Button>
             <Button variant="primary" onClick={this.handleClose}>
-              Save Changes
+              Save meal model
             </Button>
           </Modal.Footer>
         </Modal>

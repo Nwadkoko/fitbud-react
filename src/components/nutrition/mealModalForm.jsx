@@ -1,6 +1,7 @@
 import React from "react";
 import firebaseApp from "firebase";
-import { wait } from "@testing-library/react";
+import { Button } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 
 export class MealModalForm extends React.Component {
   constructor(props) {
@@ -19,12 +20,8 @@ export class MealModalForm extends React.Component {
     this.setState({ calories: event.target.value }, () => console.log(this.state.calories));
   };
 
-  render() {
-    return (
-      <form>
-        <label htmlFor="meal-name">Meal</label>
-        <input type="text" name="meal-name" onChange={this.mealChangeHandler} />
-        <label htmlFor="meal-calories">Calories</label>
+  /*
+   <label htmlFor="meal-calories">Calories</label>
         <input
           type="number"
           name="meal-calories"
@@ -33,7 +30,16 @@ export class MealModalForm extends React.Component {
         <label htmlFor="meal-date">DateTime</label>
         <input type="datetime-local" name="meal-date" />
         <input type="submit" value="Submit!" onClick={this.submitData} />
-      </form>
+        */
+
+  render() {
+    return (
+        <Form>
+        <Form.Group controlId="formBasicMealName">
+          <Form.Label>Meal name</Form.Label>
+          <Form.Control type="meal" placeholder="Enter meal name" />
+        </Form.Group>
+      </Form>
     );
   }
 
