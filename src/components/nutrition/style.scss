@@ -9,3 +9,14 @@
     left: 400px;
     top: 100px;
 }
+
+.item-form-container {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: grey;
+
+    Form {
+        flex: 1 0 25%;
+        margin: 5px;
+    }
+}
