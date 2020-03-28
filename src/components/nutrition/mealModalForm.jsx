@@ -3,12 +3,13 @@ import firebaseApp from "firebase";
 import { Button } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import ItemMealModalForm from "./itemMealModalForm";
+import ItemMealModalList from "./itemMealModalList";
 
 export class MealModalForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        count: 1,
+      count: 0,
       meal: "",
       calories: 0
     };
@@ -59,6 +60,7 @@ export class MealModalForm extends React.Component {
           <Form.Label>Meal name</Form.Label>
           <Form.Control type="meal" placeholder="Enter meal name" />
         </Form.Group>
+        <ItemMealModalList />
         {this.displainFormItem()}
         <Button variant="success" onClick={this.addFormItem.bind(this)}>+ Add item</Button>
       </Form>

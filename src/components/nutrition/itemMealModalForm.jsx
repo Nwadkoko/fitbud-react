@@ -36,6 +36,18 @@ export class ItemMealModalForm extends React.Component {
     );
   }
 
+  retrieveItems = () => {
+    var uid = firebaseApp.auth().currentUser.uid;
+    var items = [];
+    firebaseApp.database().ref(uid + "/items/").on("value", function(snapshot) {
+      console.log(snapshot.val());
+      items.push(snapshot.val());
+    }, function (errorObject) {
+      console.log("The read failed: " + errorObject.code);
+    });
+    console.log(items);
+  }
+
   render() {
     return (
       <div className="item-form-container">
@@ -62,6 +74,9 @@ export class ItemMealModalForm extends React.Component {
           <Button variant="success" onClick={this.submitData}>
             * Save item
           </Button>
+          <Button variant="success" onClick={this.retrieveItems}>
+            Retrieve items
+          </Button>
         </Form>
       </div>
     );
@@ -82,15 +97,6 @@ export class ItemMealModalForm extends React.Component {
       today.getDate();
     var time =
       today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-
-    /*firebaseApp
-      .database()
-      .ref(uid + "/meals/" + date + "/" + time + "/name")
-      .set(this.state.meal);
-    firebaseApp
-      .database()
-      .ref(uid + "/meals/" + date + "/" + time + "/calories")
-      .set(this.state.calories);*/
 
       firebaseApp
       .database()
