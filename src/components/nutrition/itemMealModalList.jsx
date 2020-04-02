@@ -7,25 +7,59 @@ export class ItemMealModalList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        items: []
-    }
+      items: []
+    };
+  }
+
+  componentDidMount() {
+    console.log(" : mounted")
+    this.retrieveItems();
   }
 
   retrieveItems = () => {
-    var uid = firebaseApp.auth().currentUser.uid;  
-    firebaseApp.database().ref(uid + "/items/").on("value", (snapshot) => {
-      console.log(snapshot.val());
-      this.setState({ items: this.state.items.push(snapshot.val())});
-    }, function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
+    var newArray = [];
+    var uid = firebaseApp.auth().currentUser.uid;
+    firebaseApp
+      .database()
+      .ref(uid + "/items/")
+      .on("value", snapshot => {
+        newArray.push(snapshot.val());
+      });
+    this.setState({
+      items: newArray
     });
-    console.log(this.state.items);
+    console.log(this.state.items)
+  };
+
+  chooseChangeHandler = (event) => {
+    console.log(event.target.value)
+    console.log(Object.entries(this.state.items[0][event.target.value]))
   }
+  
 
   render() {
+      if(this.state.items.length > 0) {
+      var items = Object.keys(this.state.items[0]).map(item => (
+        <option key={item}>{item}</option>
+      ))
+      }
+      /*Object.entries(item.map(sub_item => {
+          console.log('sub_item', sub_item.glucides);
+        }))*/
+      /*var items = this.state.items[0].map(item => (
+        <option key={item.glucides}>{item.glucides}</option>
+      ));*/
+    
+
     return (
       <div className="item-form-container">
-          <Button onClick={this.retrieveItems}>Retrieve Items</Button>
+        <Form.Group controlId="formGridState">
+          <Form.Label>State</Form.Label>
+          <Form.Control as="select" onChange={this.chooseChangeHandler}>
+            {items}
+          </Form.Control>
+        </Form.Group>
+        <Button onClick={this.retrieveItems}>Retrieve</Button>
       </div>
     );
   }

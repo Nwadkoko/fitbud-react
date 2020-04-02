@@ -41,18 +41,6 @@ export class MealModalForm extends React.Component {
     );
   };
 
-  /*
-   <label htmlFor="meal-calories">Calories</label>
-        <input
-          type="number"
-          name="meal-calories"
-          onChange={this.caloriesChangeHandler}
-        />
-        <label htmlFor="meal-date">DateTime</label>
-        <input type="datetime-local" name="meal-date" />
-        <input type="submit" value="Submit!" onClick={this.submitData} />
-        */
-
   render() {
     return (
       <Form>
