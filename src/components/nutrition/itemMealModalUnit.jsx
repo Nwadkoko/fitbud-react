@@ -2,9 +2,8 @@ import React from "react";
 import firebaseApp from "firebase";
 import { Button } from "react-bootstrap";
 import { Form } from "react-bootstrap";
-import ItemMealModalUnit from "./itemMealModalUnit";
 
-export class ItemMealModalList extends React.Component {
+export class ItemMealModalUnit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,7 +22,7 @@ export class ItemMealModalList extends React.Component {
         newArray.push(snapshot.val());
       });
     this.setState({ items: newArray}, () => {
-      //this.componentDidMount()
+      this.componentDidMount()
     })
   };
 
@@ -72,10 +71,10 @@ export class ItemMealModalList extends React.Component {
           </Form.Control>
         </Form.Group>
         <Button onClick={this.retrieveItems} className="button-items">Retrieve</Button>
-        <Button onClick={<ItemMealModalUnit />}>Add item to meal</Button>
+        <Button onClick={this.addItemToMeal}>Add item to meal</Button>
       </div>
     );
   }
 }
 
-export default ItemMealModalList;
+export default ItemMealModalUnit;

@@ -74,9 +74,6 @@ export class ItemMealModalForm extends React.Component {
           <Button variant="success" onClick={this.submitData}>
             * Save item
           </Button>
-          <Button variant="success" onClick={this.retrieveItems}>
-            Retrieve items
-          </Button>
         </Form>
       </div>
     );
