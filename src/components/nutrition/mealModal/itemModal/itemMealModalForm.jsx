@@ -68,9 +68,6 @@ export class ItemMealModalForm extends React.Component {
             <Form.Label>Protéines</Form.Label>
             <Form.Control type="number" placeholder="Enter proteines" onChange={this.proteinesChangeHandler}/>
           </Form.Group>
-          <Button variant="secondary">
-            - Remove item
-          </Button>
           <Button variant="success" onClick={this.submitData}>
             * Save item
           </Button>

@@ -9,6 +9,7 @@ export class ItemMealModalUnit extends React.Component {
     this.state = {
       items: []
     };
+    console.log(this.props.times);
     this.retrieveItems()
   }
 
@@ -21,7 +22,7 @@ export class ItemMealModalUnit extends React.Component {
       .on("value", snapshot => {
         newArray.push(snapshot.val());
       });
-    this.setState({ items: newArray}, () => {
+    this.setState({ items: newArray }, () => {
       this.componentDidMount()
     })
   };
@@ -30,9 +31,14 @@ export class ItemMealModalUnit extends React.Component {
       console.log("mounted")
   }
 
+  sendData = (data) => {
+    this.props.parentCallback(data, this.props.index);
+  }
+
   chooseChangeHandler = (event) => {
     console.log(event.target.value)
     console.log(Object.entries(this.state.items[0][event.target.value]))
+    this.sendData(event.target.value);
   }
   
   render() {

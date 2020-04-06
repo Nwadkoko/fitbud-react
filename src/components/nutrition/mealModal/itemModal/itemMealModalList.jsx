@@ -8,8 +8,16 @@ export class ItemMealModalList extends React.Component {
   constructor(props) {
     super(props);
     this.state =  {
-      times: 0
+      times: 0,
+      items: []
     }
+  }
+
+  callbackFunction = (childData, index) => {
+    var newArray = this.state.items;
+    newArray[index] = childData;
+    this.setState({ items: newArray });
+    this.props.parentCallback(newArray);
   }
   
   handleClick = () => {
@@ -25,7 +33,7 @@ export class ItemMealModalList extends React.Component {
     for(let i = 0; i < this.state.times; i++){
         forms.push(
             <div key={i}>
-                <ItemMealModalUnit />
+                <ItemMealModalUnit parentCallback={this.callbackFunction} index={i}/>
             </div>
         )
     }

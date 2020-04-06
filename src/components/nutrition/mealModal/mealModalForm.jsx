@@ -2,8 +2,8 @@ import React from "react";
 import firebaseApp from "firebase";
 import { Button } from "react-bootstrap";
 import { Form } from "react-bootstrap";
-import ItemMealModalForm from "./itemMealModalForm";
-import ItemMealModalList from "./itemMealModalList";
+import ItemMealModalForm from "./itemModal/itemMealModalForm";
+import ItemMealModalList from "./itemModal/itemMealModalList";
 
 export class MealModalForm extends React.Component {
   constructor(props) {
@@ -11,8 +11,14 @@ export class MealModalForm extends React.Component {
     this.state = {
       count: 0,
       meal: "",
-      calories: 0
+      calories: 0,
+      items : []
     };
+  }
+
+  callbackFunction = (childData) => {
+    this.setState({ items: childData });
+    this.props.parentCallback(this.state.items, this.state.meal);
   }
 
   addFormItem(){
@@ -46,40 +52,14 @@ export class MealModalForm extends React.Component {
       <Form>
         <Form.Group controlId="formBasicMealName">
           <Form.Label>Meal name</Form.Label>
-          <Form.Control type="meal" placeholder="Enter meal name" />
+          <Form.Control type="meal" placeholder="Enter meal name" onChange={this.mealChangeHandler}/>
         </Form.Group>
-        <ItemMealModalList />
+        <ItemMealModalList parentCallback={this.callbackFunction}/>
         {this.displainFormItem()}
         <Button variant="success" onClick={this.addFormItem.bind(this)}>+ Add item</Button>
       </Form>
     );
   }
-
-  submitData = event => {
-    event.preventDefault();
-    console.log(this.state.meal);
-    console.log("signed in");
-
-    var uid = firebaseApp.auth().currentUser.uid;
-    var today = new Date();
-    var date =
-      today.getFullYear() +
-      "-" +
-      (today.getMonth() + 1) +
-      "-" +
-      today.getDate();
-    var time =
-      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-
-    firebaseApp
-      .database()
-      .ref(uid + "/meals/" + date + "/" + time + "/name")
-      .set(this.state.meal);
-    firebaseApp
-      .database()
-      .ref(uid + "/meals/" + date + "/" + time + "/calories")
-      .set(this.state.calories);
-  };
 }
 
 export default MealModalForm;
