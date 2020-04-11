@@ -37,16 +37,16 @@ class Login extends React.Component {
         </div>
         <div className="footer">
           <div className="sign-in">
-            <button type="button" className="btn">
+            <button type="button" className="vbtn">
               Login
             </button>
-            <button className="btn" onClick={signInWithGoogle}>
+            <button className="vbtn" onClick={signInWithGoogle}>
               Sign in with Google
             </button>
           </div>
           <div className="sign-out">
             {user ? (
-              <button className="btn" onClick={signOut}>
+              <button className="vbtn" onClick={signOut}>
                 Sign out
               </button>
             ) : (
