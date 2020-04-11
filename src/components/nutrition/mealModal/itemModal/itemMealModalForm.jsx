@@ -10,43 +10,72 @@ export class ItemMealModalForm extends React.Component {
       item: "",
       glucides: 0,
       lipides: 0,
-      proteines: 0
+      proteines: 0,
+      calories: 0,
     };
   }
 
-  itemChangeHandler = event => {
+  itemChangeHandler = (event) => {
     this.setState({ item: event.target.value });
-  }
+  };
 
-  glucidesChangeHandler = event => {
-    this.setState({ glucides: event.target.value }, () =>
-      console.log(this.state.glucides)
+  glucidesChangeHandler = (event) => {
+    this.setState(
+      {
+        glucides: event.target.value,
+        calories:
+          event.target.value * 4 +
+          this.state.lipides * 9 +
+          this.state.proteines * 4,
+      },
+      () => console.log(this.state.glucides)
     );
-  }
+  };
 
-  lipidesChangeHandler = event => {
-    this.setState({ lipides: event.target.value }, () =>
-      console.log(this.state.lipides)
+  lipidesChangeHandler = (event) => {
+    this.setState(
+      {
+        lipides: event.target.value,
+        calories:
+          this.state.glucides * 4 +
+          event.target.value * 9 +
+          this.state.proteines * 4,
+      },
+      () => console.log(this.state.lipides)
     );
-  }
+  };
 
-  proteinesChangeHandler = event => {
-    this.setState({ proteines: event.target.value }, () =>
-      console.log(this.state.proteines)
+  proteinesChangeHandler = (event) => {
+    this.setState(
+      {
+        proteines: event.target.value,
+        calories:
+          this.state.glucides * 4 +
+          this.state.lipides * 9 +
+          event.target.value * 4,
+      },
+      () => console.log(this.state.proteines)
     );
-  }
+  };
 
   retrieveItems = () => {
     var uid = firebaseApp.auth().currentUser.uid;
     var items = [];
-    firebaseApp.database().ref(uid + "/items/").on("value", function(snapshot) {
-      console.log(snapshot.val());
-      items.push(snapshot.val());
-    }, function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
-    });
+    firebaseApp
+      .database()
+      .ref(uid + "/items/")
+      .on(
+        "value",
+        function (snapshot) {
+          console.log(snapshot.val());
+          items.push(snapshot.val());
+        },
+        function (errorObject) {
+          console.log("The read failed: " + errorObject.code);
+        }
+      );
     console.log(items);
-  }
+  };
 
   render() {
     return (
@@ -54,19 +83,39 @@ export class ItemMealModalForm extends React.Component {
         <Form>
           <Form.Group controlId="formBasicMealName">
             <Form.Label>Item name</Form.Label>
-            <Form.Control type="meal" placeholder="Enter item name" onChange={this.itemChangeHandler}/>
+            <Form.Control
+              type="meal"
+              placeholder="Enter item name"
+              onChange={this.itemChangeHandler}
+            />
           </Form.Group>
           <Form.Group controlId="formBasicItemGlucides">
             <Form.Label>Glucides</Form.Label>
-            <Form.Control type="number" placeholder="Enter glucides" onChange={this.glucidesChangeHandler}/>
+            <Form.Control
+              type="number"
+              placeholder="Enter glucides"
+              onChange={this.glucidesChangeHandler}
+            />
           </Form.Group>
           <Form.Group controlId="formBasicItemLipides">
             <Form.Label>Lipides</Form.Label>
-            <Form.Control type="number" placeholder="Enter lipides" onChange={this.lipidesChangeHandler}/>
+            <Form.Control
+              type="number"
+              placeholder="Enter lipides"
+              onChange={this.lipidesChangeHandler}
+            />
           </Form.Group>
           <Form.Group controlId="formBasicItemProteines">
             <Form.Label>Protéines</Form.Label>
-            <Form.Control type="number" placeholder="Enter proteines" onChange={this.proteinesChangeHandler}/>
+            <Form.Control
+              type="number"
+              placeholder="Enter proteines"
+              onChange={this.proteinesChangeHandler}
+            />
+          </Form.Group>
+          <Form.Group controlId="formBasicCaloriesCount">
+            <Form.Label>Calories</Form.Label>
+            <Form.Control type="number" readOnly value={this.state.calories} />
           </Form.Group>
           <Button variant="success" onClick={this.submitData}>
             * Save item
@@ -76,7 +125,7 @@ export class ItemMealModalForm extends React.Component {
     );
   }
 
-  submitData = event => {
+  submitData = (event) => {
     event.preventDefault();
     console.log(this.state.meal);
     console.log("signed in");
@@ -92,20 +141,25 @@ export class ItemMealModalForm extends React.Component {
     var time =
       today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
-      firebaseApp
+    firebaseApp
       .database()
       .ref(uid + "/items/" + this.state.item + "/glucides/")
       .set(this.state.glucides);
 
-      firebaseApp
+    firebaseApp
       .database()
       .ref(uid + "/items/" + this.state.item + "/lipides/")
       .set(this.state.lipides);
 
-      firebaseApp
+    firebaseApp
       .database()
       .ref(uid + "/items/" + this.state.item + "/proteines/")
       .set(this.state.proteines);
+
+    firebaseApp
+      .database()
+      .ref(uid + "/items/" + this.state.item + "/calories/")
+      .set(this.state.calories);
   };
 }
 

@@ -3,12 +3,14 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import mealModalForm, { MealModalForm } from "./mealModalForm";
 import firebaseApp from "firebase";
+import ItemMealModalForm from "./itemModal/itemMealModalForm";
 
 export class MealModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showModal: false,
+      showModal2: false,
       items: [],
       meal: ""
     };
@@ -20,13 +22,21 @@ export class MealModal extends React.Component {
 
   handleClose = () => this.setState({showModal: false});
   handleShow = () => this.setState({showModal: true});
+  handleClose2 = () => this.setState({showModal2: false});
+  handleShow2= () => this.setState({showModal2: true});
 
   render() {
     return (
       <>
-        <Button variant="primary" onClick={this.handleShow}>
+        <div className="buttons-container">
+        <button onClick={this.handleShow} className="save-meal-modal">
           Save a meal
-        </Button>
+        </button>
+
+        <button onClick={this.handleShow2} className="save-meal-modal">
+          Save an item
+        </button>
+        </div>
 
         <Modal
           show={this.state.showModal}
@@ -49,6 +59,27 @@ export class MealModal extends React.Component {
             </Button>
             <Button variant="primary" onClick={this.handleClose}>
               Save meal model
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <Modal
+          show={this.state.showModal2}
+          onHide={this.handleClose2}
+          animation={false}
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Item</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <ItemMealModalForm />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose2}>
+              Close
+            </Button>
+            <Button variant="primary" >
+              Save item
             </Button>
           </Modal.Footer>
         </Modal>
