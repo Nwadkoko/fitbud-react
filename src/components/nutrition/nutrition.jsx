@@ -1,5 +1,6 @@
 import React from "react";
 import MealModal from "./mealModal/mealModal";
+import Meals from "./meals/meals";
 
 export class Nutrition extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ export class Nutrition extends React.Component {
     return (
       <div className="nutrition">
         <MealModal />
+        <Meals />
       </div>
     );
   }
