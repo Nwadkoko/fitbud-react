@@ -10,16 +10,17 @@ class List extends React.Component {
       meals: [],
       items: [],
       renderView: false,
-      itemsToModal: []
+      itemsToModal: [],
+      userId: "",
+      loading: true,
     };
   }
 
   retrieveMeals = () => {
     var newArray = [];
-    var uid = firebaseApp.auth().currentUser.uid;
     firebaseApp
       .database()
-      .ref(uid + "/meals/")
+      .ref(this.state.userId + "/meals/")
       .on("value", (snapshot) => {
         newArray.push(snapshot.val());
       });
@@ -29,60 +30,78 @@ class List extends React.Component {
   };
 
   componentDidMount() {
-    console.log("list mounted");
-    //this.retrieveMeals();
+    this.authSubscription = firebaseApp.auth().onAuthStateChanged((user) => {
+      this.setState({
+        loading: false,
+        userId: user.uid,
+      });
+    });
+    var itemsRef = firebaseApp.database().ref(this.state.userId + "/items/");
+    itemsRef.once('value', (snapshot) => {
+      this.setState({
+        items: snapshot.val()
+      })
+    }, (errorObject) => {
+      console.log(errorObject);
+    });
   }
 
   callbackFunction = (toggleModal) => {
     this.setState({
-      renderView: toggleModal
-    })
-  }
+      renderView: toggleModal,
+    });
+  };
 
   retrieveItem = (itemName) => {
-    var uid = firebaseApp.auth().currentUser.uid;
     let newArray = [];
-    firebaseApp.database().ref(uid + "/items/").on("value", (snapshot) => {
-      newArray.push(snapshot.val());
-    });
-    this.setState({ items: newArray[0] }, () => {
-      this.componentDidMount();
-    })
+    firebaseApp
+      .database()
+      .ref(this.state.userId + "/items/")
+      .on("value", (snapshot) => {
+        newArray.push(snapshot.val());
+      });
+    this.setState({ items: newArray[0] }, () => {});
     console.log(newArray[0]);
-  }
+  };
 
   handleClick = (item) => {
     console.log("handleclick item :" + item.name);
     console.log(Object.values(item));
     var newItems = [];
     var itemObject;
-    item.items.forEach((item => {
+    item.items.forEach((item) => {
       console.log(this.state.items[item]);
       itemObject = this.state.items[item];
       itemObject.name = item;
       newItems.push(itemObject);
-    }))
+    });
     this.setState({
       renderView: true,
-      itemsToModal: newItems
-    })
-  }
+      itemsToModal: newItems,
+    });
+  };
 
   render() {
     let table = [];
-    table.push(...[
-      <tr>
-        <th>Meal</th>
-        <th>Calories</th>
-      </tr>
-    ])
+    table.push(
+      ...[
+        <tr>
+          <th>Meal</th>
+          <th>Calories</th>
+        </tr>,
+      ]
+    );
     if (this.state.meals.length > 0) {
       this.state.meals.forEach((element) => {
         let calories = 0;
         Object.values(element).forEach((items) => {
           table.push(
             ...[
-            <th className="tg-0lax"><a href="#" onClick={() => this.handleClick(items)}>{items.name}</a></th>
+              <th className="tg-0lax">
+                <a href="#" onClick={() => this.handleClick(items)}>
+                  {items.name}
+                </a>
+              </th>,
             ]
           );
           console.log(items);
@@ -94,9 +113,9 @@ class List extends React.Component {
               ]
             );*/
           });
-          table.push(...[<td className="tg-0lax">{calories}</td>])
+          table.push(...[<td className="tg-0lax">{calories}</td>]);
           calories = 0;
-          table.push(...[<tr></tr>])
+          table.push(...[<tr></tr>]);
         });
       });
     }
@@ -106,7 +125,14 @@ class List extends React.Component {
         <table className="tg">{table}</table>
         <Button onClick={this.retrieveMeals}>XX</Button>
         <Button onClick={this.retrieveItem}>XXX</Button>
-        {this.state.renderView ? <MealView items={Object.values(this.state.itemsToModal)} parentCallback={this.callbackFunction}></MealView> : <div></div>}
+        {this.state.renderView ? (
+          <MealView
+            items={Object.values(this.state.itemsToModal)}
+            parentCallback={this.callbackFunction}
+          ></MealView>
+        ) : (
+          <div></div>
+        )}
       </div>
     );
   }
