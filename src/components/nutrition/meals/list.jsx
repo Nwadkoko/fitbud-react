@@ -32,17 +32,29 @@ class List extends React.Component {
   componentDidMount() {
     this.authSubscription = firebaseApp.auth().onAuthStateChanged((user) => {
       this.setState({
-        loading: false,
         userId: user.uid,
       });
-    });
-    var itemsRef = firebaseApp.database().ref(this.state.userId + "/items/");
-    itemsRef.once('value', (snapshot) => {
-      this.setState({
-        items: snapshot.val()
-      })
-    }, (errorObject) => {
-      console.log(errorObject);
+      var itemsRef = firebaseApp.database().ref(this.state.userId + "/items/");
+      itemsRef.once(
+        "value",
+        (snapshot) => {
+          this.setState({
+            items: snapshot.val(),
+          });
+        },
+        (errorObject) => {
+          console.log(errorObject);
+        }
+      );
+      var newArray = [];
+      var mealsRef = firebaseApp.database().ref(this.state.userId + "/meals/");
+      mealsRef.once("value", (snapshot) => {
+        newArray.push(snapshot.val());
+        this.setState({
+          meals: newArray,
+          loading: false,
+        });
+      });
     });
   }
 
@@ -91,7 +103,8 @@ class List extends React.Component {
         </tr>,
       ]
     );
-    if (this.state.meals.length > 0) {
+    console.log(this.state.loading);
+    if (this.state.loading == false) {
       this.state.meals.forEach((element) => {
         let calories = 0;
         Object.values(element).forEach((items) => {
