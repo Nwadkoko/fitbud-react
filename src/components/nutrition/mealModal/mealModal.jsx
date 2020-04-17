@@ -102,6 +102,10 @@ export class MealModal extends React.Component {
       .ref(uid + "/meals/" + this.state.meal + "/items/" + i + "/")
       .set(this.state.items[i]);
     }
+    firebaseApp
+    .database()
+    .ref(uid + "/meals/" + this.state.meal + "/name/")
+    .set(this.state.meal);
   };
 }
 
